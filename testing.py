@@ -55,19 +55,50 @@ class NapariWindow():
         self.corners = np.zeros(self.dimensions[0]).repeat(repeats=6).reshape((self.dimensions[0]*6, 1, 1))
         self.corners = np.tile(self.corners, (1, 4, 2))
 
+        self.organ_labels = {
+            1: 'Liver',
+            2: 'Bladder',
+            3: 'Lungs',
+            4: 'Kidneys',
+            5: 'Bone',
+            6: 'Brain'
+        }
+
         # TODO: dodać własne colormaps (ale to powinno być łatwe)
         viewer = napari.Viewer()
 
         viewer.add_image(self.image_data['image'])
         viewer.add_labels(self.label_data['image'])
 
+        self.properties = {'label': []}
+
         for i in range(self.dimensions[0]):
             features = skimage.measure.regionprops_table(
                 self.label_data['image'][i], properties=('label', 'bbox', 'perimeter', 'area')
             )
             self.make_corners([features[f'bbox-{j}'] for j in range(4)], i)
+            for i in range(1, 7):
+                if i in features['label']:
+                    self.properties['label'].append(self.organ_labels[i])
+                else:
+                    self.properties['label'].append('')
+
 
         self.shapes = np.concatenate((self.slices, self.corners), axis=2)
+
+        properties = {
+            'label': ['liver', 'bladder', 'lungs', 'kidneys', 'bone', 'brain'] * self.dimensions[0]
+        }
+
+        text_kwargs = {
+            'string': '{label}',
+            'size': 12,
+            'color': 'green',
+            'anchor': 'upper_left',
+            'translation': [0, 0]
+        }
+
+        print(self.properties['label'])
 
         layer = viewer.add_shapes(
             np.array(self.shapes),
@@ -76,15 +107,18 @@ class NapariWindow():
             edge_width = 5,
             face_color='transparent',
             name='sliced',
+            properties=self.properties,
+            text=text_kwargs
         )
 
-
+        """
         for i in range(self.dimensions[0]):
             viewer.dims.current_step = (i, self.dimensions[1], self.dimensions[2])
             screenshot = viewer.screenshot(canvas_only=True)
             iio.imwrite(f'./screenshots/plane_{i}.png', screenshot)
+        """
 
-        #napari.run()
+        napari.run()
 
 
 NapariWindow(img_filepath, labels_filepath)
