@@ -14,7 +14,8 @@ from engineer.segmentation_colors import SegmentationColors
 labels_filepath = './labels-31.nii'
 img_filepath = './volume-31.nii'
 
-class NapariWindow():
+
+class NapariWindow:
 
     # creates bounding box corners from segmentations array
     def make_corners(self, bbox_extents, i):
@@ -46,13 +47,13 @@ class NapariWindow():
     # converts SegmentationColors class instance to dictionary
     # supported as napari labels layer argument
     def segmentation_colors_to_layer_argument(self, segmentation_colors: SegmentationColors):
-        colors_dict = {0: [0, 0, 0, 0.1]}
-        colors_dict[1] = segmentation_colors.liver_color.to_rgba_array()
-        colors_dict[2] = segmentation_colors.bladder_color.to_rgba_array()
-        colors_dict[3] = segmentation_colors.lungs_color.to_rgba_array()
-        colors_dict[4] = segmentation_colors.kidneys_color.to_rgba_array()
-        colors_dict[5] = segmentation_colors.bone_color.to_rgba_array()
-        colors_dict[6] = segmentation_colors.brain_color.to_rgba_array()
+        colors_dict = {0: [0, 0, 0, 0.1],
+                       1: segmentation_colors.liver_color.to_rgba_array(),
+                       2: segmentation_colors.bladder_color.to_rgba_array(),
+                       3: segmentation_colors.lungs_color.to_rgba_array(),
+                       4: segmentation_colors.kidneys_color.to_rgba_array(),
+                       5: segmentation_colors.bone_color.to_rgba_array(),
+                       6: segmentation_colors.brain_color.to_rgba_array()}
         return colors_dict
 
     def __init__(self,
@@ -62,7 +63,7 @@ class NapariWindow():
                  # path to segmentation image in .nii format
                  segmentation,
 
-                 # colors for each of the organs (6 element numpy list with rgba tuples)
+                 # colors for each of the organs
                  segmentation_colors = SegmentationColors(
                      # aqua marine
                      liver_color=NapariColorFormat('#7FFFD4'),
@@ -182,7 +183,7 @@ class NapariWindow():
                                color=self.segmentation_colors
                                )
 
-        self.properties = {'label': ['' for _ in range (self.dimensions[0] * 6)]}
+        self.properties = {'label': ['' for _ in range(self.dimensions[0] * 6)]}
 
         for i in range(self.dimensions[0]):
             features = skimage.measure.regionprops_table(

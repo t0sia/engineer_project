@@ -1,8 +1,9 @@
 from PIL import ImageColor
 
+
 # creates object with nomralised RGBA format
-# (Napari-supported) from hex code ('#' included)
-class NapariColorFormat():
+# (napari-supported) from hex code ('#' included)
+class NapariColorFormat:
 
     def __init__(self, hex_code, alpha=0.8):
         rgb_tuple = ImageColor.getcolor(hex_code, 'RGB')

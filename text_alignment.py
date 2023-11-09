@@ -1,5 +1,6 @@
 from enum import Enum
 
+
 class TextAlignment(Enum):
     center = 1
     upper_left = 2

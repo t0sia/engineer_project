@@ -1,9 +1,10 @@
 from engineer.napari_color_format import NapariColorFormat
 
+
 # contains NapariColorFormat objects for
 # each of the organs included in the
 # segmentations
-class SegmentationColors():
+class SegmentationColors:
     def __init__(self,
                  liver_color: NapariColorFormat,
                  bladder_color: NapariColorFormat,

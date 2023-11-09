@@ -1,5 +1,6 @@
 from enum import Enum
 
+
 class Colormap(Enum):
     GrBu = 1
     GrBu_d = 2
@@ -38,6 +39,3 @@ class Colormap(Enum):
     twilight_shifted = 35
     viridis = 36
     winter = 37
-
-
-
