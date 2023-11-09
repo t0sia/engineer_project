@@ -17,7 +17,6 @@ class NapariWindow():
         maxr = bbox_extents[2]
         maxc = bbox_extents[3]
 
-        #nie spierdol wymiarow tu pls
         for j in range(len(minr)):
             self.corners[6*i+j][0][0] = minr[j]
             self.corners[6*i+j][0][1] = minc[j]
@@ -30,6 +29,12 @@ class NapariWindow():
 
             self.corners[6*i+j][3][0] = minr[j]
             self.corners[6*i+j][3][1] = maxc[j]
+
+    def save_images(self):
+        for i in range(self.dimensions[0]):
+            self.viewer.dims.current_step = (i, self.dimensions[1], self.dimensions[2])
+            screenshot = self.viewer.screenshot(canvas_only=True)
+            iio.imwrite(f'./screenshots/plane_{i}.png', screenshot)
 
     def __init__(self, original_image,
                  segmentation,
@@ -65,42 +70,32 @@ class NapariWindow():
         }
 
         # TODO: dodać własne colormaps (ale to powinno być łatwe)
-        viewer = napari.Viewer()
+        self.viewer = napari.Viewer()
 
-        viewer.add_image(self.image_data['image'])
-        viewer.add_labels(self.label_data['image'])
+        self.viewer.add_image(self.image_data['image'])
+        self.viewer.add_labels(self.label_data['image'])
 
-        self.properties = {'label': []}
+        self.properties = {'label': ['' for _ in range (self.dimensions[0] * 6)]}
 
         for i in range(self.dimensions[0]):
             features = skimage.measure.regionprops_table(
                 self.label_data['image'][i], properties=('label', 'bbox', 'perimeter', 'area')
             )
             self.make_corners([features[f'bbox-{j}'] for j in range(4)], i)
-            for i in range(1, 7):
-                if i in features['label']:
-                    self.properties['label'].append(self.organ_labels[i])
-                else:
-                    self.properties['label'].append('')
-
+            for k in range(len(features['label'])):
+                self.properties['label'][i*6 + k] = self.organ_labels[features['label'][k]]
 
         self.shapes = np.concatenate((self.slices, self.corners), axis=2)
 
-        properties = {
-            'label': ['liver', 'bladder', 'lungs', 'kidneys', 'bone', 'brain'] * self.dimensions[0]
-        }
-
         text_kwargs = {
-            'string': '{label}',
-            'size': 12,
+            'text': '{label}',
+            'size': 8,
             'color': 'green',
             'anchor': 'upper_left',
             'translation': [0, 0]
         }
 
-        print(self.properties['label'])
-
-        layer = viewer.add_shapes(
+        layer = self.viewer.add_shapes(
             np.array(self.shapes),
             shape_type='polygon',
             edge_color='green',
@@ -111,12 +106,7 @@ class NapariWindow():
             text=text_kwargs
         )
 
-        """
-        for i in range(self.dimensions[0]):
-            viewer.dims.current_step = (i, self.dimensions[1], self.dimensions[2])
-            screenshot = viewer.screenshot(canvas_only=True)
-            iio.imwrite(f'./screenshots/plane_{i}.png', screenshot)
-        """
+        #self.save_images()
 
         napari.run()
 
