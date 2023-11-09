@@ -6,10 +6,10 @@ import skimage.measure
 import imageio.v3 as iio
 
 from engineer.text_alignment import TextAlignment
-from engineer.blending import Blending
-from engineer.colormap import Colormap
+from engineer.enums.blending import Blending
+from engineer.enums.colormap import Colormap
 from engineer.napari_color_format import NapariColorFormat
-from engineer.segmentation_colors import SegmentationColors
+from engineer.enums.segmentation_colors import SegmentationColors
 
 labels_filepath = './labels-31.nii'
 img_filepath = './volume-31.nii'
