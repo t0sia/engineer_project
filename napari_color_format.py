@@ -1,5 +1,7 @@
 from PIL import ImageColor
 
+# creates object with nomralised RGBA format
+# (Napari-supported) from hex code ('#' included)
 class NapariColorFormat():
 
     def __init__(self, hex_code, alpha=0.8):
@@ -9,5 +11,6 @@ class NapariColorFormat():
         self.blue = rgb_tuple[2] / 255
         self.alpha = alpha
 
+    # returns RGBA array from class instance
     def to_rgba_array(self):
         return [self.red, self.green, self.blue, self.alpha]

@@ -16,6 +16,7 @@ img_filepath = './volume-31.nii'
 
 class NapariWindow():
 
+    # creates bounding box corners from segmentations array
     def make_corners(self, bbox_extents, i):
         minr = bbox_extents[0]
         minc = bbox_extents[1]
@@ -35,12 +36,15 @@ class NapariWindow():
             self.corners[6*i+j][3][0] = minr[j]
             self.corners[6*i+j][3][1] = maxc[j]
 
+    # saves 2D slices from napari viewer to .png format
     def save_images(self):
         for i in range(self.dimensions[0]):
             self.viewer.dims.current_step = (i, self.dimensions[1], self.dimensions[2])
             screenshot = self.viewer.screenshot(canvas_only=True)
             iio.imwrite(f'./screenshots/plane_{i}.png', screenshot)
 
+    # converts SegmentationColors class instance to dictionary
+    # supported as napari labels layer argument
     def segmentation_colors_to_layer_argument(self, segmentation_colors: SegmentationColors):
         colors_dict = {0: [0, 0, 0, 0.1]}
         colors_dict[1] = segmentation_colors.liver_color.to_rgba_array()
@@ -51,8 +55,13 @@ class NapariWindow():
         colors_dict[6] = segmentation_colors.brain_color.to_rgba_array()
         return colors_dict
 
-    def __init__(self, original_image,
+    def __init__(self,
+
+                 # path to original image in .nii format
+                 original_image,
+                 # path to segmentation image in .nii format
                  segmentation,
+
                  # colors for each of the organs (6 element numpy list with rgba tuples)
                  segmentation_colors = SegmentationColors(
                      # aqua marine
@@ -76,7 +85,6 @@ class NapariWindow():
                  # [!!!!] fajny argument sprawdzcie sobie jak to dziala imo spoko by to uwzglednic
                  segmentation_contour = 0,
 
-
                  # opacity for the original image layer (from 0 to 1)
                  image_opacity = 0.7,
                  # gamma for the original image layer (from 0.2 to 2)
@@ -86,12 +94,10 @@ class NapariWindow():
                  # blending of the image (options as specified in Blending enum)
                  image_blending = Blending.translucent.name,
 
-
                  # color of the border (segmentation layer)
                  border_color = 'green',
                  # width of the border edge (more than 5 is too much imo)
                  border_width = 5,
-
 
                  # color of border labels
                  text_color = 'green',
@@ -100,7 +106,6 @@ class NapariWindow():
                  # alignment of border labels (as specified in TextAlignment enum)
                  text_alignment = TextAlignment.center.name,
                  ):
-
 
         self.original_image = original_image
         self.segmentation = segmentation
