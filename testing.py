@@ -5,6 +5,11 @@ from napari_nifti._writer import write_single_image
 import skimage.measure
 import imageio.v3 as iio
 
+from engineer.text_alignment import TextAlignment
+from engineer.blending import Blending
+from engineer.colormap import Colormap
+from engineer.napari_color_format import NapariColorFormat
+from engineer.segmentation_colors import SegmentationColors
 
 labels_filepath = './labels-31.nii'
 img_filepath = './volume-31.nii'
@@ -36,18 +41,103 @@ class NapariWindow():
             screenshot = self.viewer.screenshot(canvas_only=True)
             iio.imwrite(f'./screenshots/plane_{i}.png', screenshot)
 
+    def segmentation_colors_to_layer_argument(self, segmentation_colors: SegmentationColors):
+        colors_dict = {0: [0, 0, 0, 0.1]}
+        colors_dict[1] = segmentation_colors.liver_color.to_rgba_array()
+        colors_dict[2] = segmentation_colors.bladder_color.to_rgba_array()
+        colors_dict[3] = segmentation_colors.lungs_color.to_rgba_array()
+        colors_dict[4] = segmentation_colors.kidneys_color.to_rgba_array()
+        colors_dict[5] = segmentation_colors.bone_color.to_rgba_array()
+        colors_dict[6] = segmentation_colors.brain_color.to_rgba_array()
+        return colors_dict
+
     def __init__(self, original_image,
                  segmentation,
+                 # colors for each of the organs (6 element numpy list with rgba tuples)
+                 segmentation_colors = SegmentationColors(
+                     # aqua marine
+                     liver_color=NapariColorFormat('#7FFFD4'),
+                     # hot pink
+                     bladder_color=NapariColorFormat('#FF69B4'),
+                     # gold
+                     lungs_color=NapariColorFormat('#FFD700'),
+                     # lime green
+                     kidneys_color=NapariColorFormat('#32CD32'),
+                     # dark orchid
+                     bone_color=NapariColorFormat('#9932CC'),
+                     # orange red
+                     brain_color=NapariColorFormat('#FF4500')
+                 ),
+                 # opacity for the segmentation layer (from 0 to 1)
+                 segmentation_opacity = 0.8,
+                 # blending of the segmentation (options as specified in Blending enum)
+                 segmentation_blending=Blending.translucent.name,
+                 # contour parameter for segmentation
+                 # [!!!!] fajny argument sprawdzcie sobie jak to dziala imo spoko by to uwzglednic
+                 segmentation_contour = 0,
+
+
+                 # opacity for the original image layer (from 0 to 1)
+                 image_opacity = 0.7,
+                 # gamma for the original image layer (from 0.2 to 2)
+                 image_gamma = 1,
+                 # colormap of the image (options as specified in ColorMap enum)
+                 image_colormap = Colormap.gray.name,
+                 # blending of the image (options as specified in Blending enum)
+                 image_blending = Blending.translucent.name,
+
+
+                 # color of the border (segmentation layer)
+                 border_color = 'green',
+                 # width of the border edge (more than 5 is too much imo)
+                 border_width = 5,
+
+
+                 # color of border labels
+                 text_color = 'green',
+                 # font size of border labels
+                 text_size = 8,
+                 # alignment of border labels (as specified in TextAlignment enum)
+                 text_alignment = TextAlignment.center.name,
                  ):
+
 
         self.original_image = original_image
         self.segmentation = segmentation
 
+        if segmentation_opacity > 1 or segmentation_opacity < 0:
+            raise ValueError('Opacity value for segmentation layer is not within required bounds (between 0 and 1).')
+
+        self.segmentation_colors = self.segmentation_colors_to_layer_argument(segmentation_colors)
+        self.segmentation_opacity = segmentation_opacity
+        self.segmentation_blending = segmentation_blending
+        self.segmentation_contour = segmentation_contour
+
+        if image_opacity > 1 or image_opacity < 0:
+            raise ValueError('Opacity value for original image layer is not within required bounds (between 0 and 1).')
+
+        if image_gamma < 0.2 or image_gamma > 2:
+            raise ValueError('Gamma value for original image layer is not within required bounds (between 0.2 and 2).')
+
+        self.image_opacity = image_opacity
+        self.image_gamma = image_gamma
+        self.image_colormap = image_colormap
+        self.image_blending = image_blending
+
+        self.border_color = border_color
+        self.border_width = border_width
+
+        self.text_color = text_color
+        self.text_size = text_size
+        self.text_alignment = text_alignment
+
         self.image_data = load_nifti(self.original_image)
-        write_single_image(self.original_image, self.image_data['image'], self.image_data['metadata'])
+        write_single_image(self.original_image, self.image_data['image'],
+                           self.image_data['metadata'])
 
         self.label_data = load_nifti(self.segmentation)
-        write_single_image(self.segmentation, self.label_data['image'], self.label_data['metadata'])
+        write_single_image(self.segmentation, self.label_data['image'],
+                           self.label_data['metadata'])
 
         if self.image_data['image'].shape != self.label_data['image'].shape:
             raise ValueError('Segmentation is of different dimensions than input image')
@@ -69,11 +159,23 @@ class NapariWindow():
             6: 'Brain'
         }
 
-        # TODO: dodać własne colormaps (ale to powinno być łatwe)
         self.viewer = napari.Viewer()
 
-        self.viewer.add_image(self.image_data['image'])
-        self.viewer.add_labels(self.label_data['image'])
+        self.viewer.add_image(self.image_data['image'],
+                              opacity=self.image_opacity,
+                              gamma=self.image_gamma,
+                              blending=self.image_blending,
+                              colormap=self.image_colormap)
+
+        # TODO: contour nie jest parametrem tylko atrybutem więc
+        # to trzeba jakoś inaczej zrobić (o ile się da) (albo wcale)
+        self.viewer.add_labels(self.label_data['image'],
+                               num_colors=6,
+                               opacity=self.segmentation_opacity,
+                               blending=self.segmentation_blending,
+                               #contour=self.segmentation_contour,
+                               color=self.segmentation_colors
+                               )
 
         self.properties = {'label': ['' for _ in range (self.dimensions[0] * 6)]}
 
@@ -87,23 +189,23 @@ class NapariWindow():
 
         self.shapes = np.concatenate((self.slices, self.corners), axis=2)
 
-        text_kwargs = {
+        self.text_kwargs = {
             'text': '{label}',
-            'size': 8,
-            'color': 'green',
-            'anchor': 'upper_left',
+            'size': self.text_size,
+            'color': self.text_color,
+            'anchor': self.text_alignment,
             'translation': [0, 0]
         }
 
-        layer = self.viewer.add_shapes(
+        self.viewer.add_shapes(
             np.array(self.shapes),
             shape_type='polygon',
-            edge_color='green',
-            edge_width = 5,
+            edge_color= self.border_color,
+            edge_width = self.border_width,
             face_color='transparent',
             name='sliced',
             properties=self.properties,
-            text=text_kwargs
+            text=self.text_kwargs
         )
 
         #self.save_images()
