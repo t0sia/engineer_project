@@ -5,11 +5,12 @@ from napari_nifti._writer import write_single_image
 import skimage.measure
 import imageio.v3 as iio
 
-from engineer.text_alignment import TextAlignment
-from engineer.enums.blending import Blending
-from engineer.enums.colormap import Colormap
-from engineer.napari_color_format import NapariColorFormat
-from engineer.enums.segmentation_colors import SegmentationColors
+from text_alignment import TextAlignment
+from enums.blending import Blending
+from enums.colormap import Colormap
+from napari_color_format import NapariColorFormat
+from enums.segmentation_colors import SegmentationColors
+from params import Params
 
 labels_filepath = './labels-31.nii'
 img_filepath = './volume-31.nii'
@@ -59,82 +60,83 @@ class NapariWindow:
     def __init__(self,
 
                  # path to original image in .nii format
-                 original_image,
+                 # original_image,
                  # path to segmentation image in .nii format
                  segmentation,
+                 params,
 
                  # colors for each of the organs
-                 segmentation_colors = SegmentationColors(
-                     # aqua marine
-                     liver_color=NapariColorFormat('#7FFFD4'),
-                     # hot pink
-                     bladder_color=NapariColorFormat('#FF69B4'),
-                     # gold
-                     lungs_color=NapariColorFormat('#FFD700'),
-                     # lime green
-                     kidneys_color=NapariColorFormat('#32CD32'),
-                     # dark orchid
-                     bone_color=NapariColorFormat('#9932CC'),
-                     # orange red
-                     brain_color=NapariColorFormat('#FF4500')
-                 ),
+                 # segmentation_colors = SegmentationColors(
+                 #     # aqua marine
+                 #     liver_color=NapariColorFormat('#7FFFD4'),
+                 #     # hot pink
+                 #     bladder_color=NapariColorFormat('#FF69B4'),
+                 #     # gold
+                 #     lungs_color=NapariColorFormat('#FFD700'),
+                 #     # lime green
+                 #     kidneys_color=NapariColorFormat('#32CD32'),
+                 #     # dark orchid
+                 #     bone_color=NapariColorFormat('#9932CC'),
+                 #     # orange red
+                 #     brain_color=NapariColorFormat('#FF4500')
+                 # ),
                  # opacity for the segmentation layer (from 0 to 1)
-                 segmentation_opacity = 0.8,
+                 # segmentation_opacity = 0.8,
                  # blending of the segmentation (options as specified in Blending enum)
                  segmentation_blending=Blending.translucent.name,
                  # contour parameter for segmentation
                  # [!!!!] fajny argument sprawdzcie sobie jak to dziala imo spoko by to uwzglednic
-                 segmentation_contour = 0,
+                 # segmentation_contour = 0,
 
                  # opacity for the original image layer (from 0 to 1)
-                 image_opacity = 0.7,
+                 # image_opacity = 0.7,
                  # gamma for the original image layer (from 0.2 to 2)
-                 image_gamma = 1,
+                 # image_gamma = 1,
                  # colormap of the image (options as specified in ColorMap enum)
                  image_colormap = Colormap.gray.name,
                  # blending of the image (options as specified in Blending enum)
                  image_blending = Blending.translucent.name,
 
                  # color of the border (segmentation layer)
-                 border_color = 'green',
+                 # border_color = 'blue',
                  # width of the border edge (more than 5 is too much imo)
-                 border_width = 5,
+                 # border_width = 5,
 
                  # color of border labels
-                 text_color = 'green',
+                 # text_color = 'green',
                  # font size of border labels
-                 text_size = 8,
+                 # text_size = 8,
                  # alignment of border labels (as specified in TextAlignment enum)
-                 text_alignment = TextAlignment.center.name,
+                 text_alignment = TextAlignment.center.name
                  ):
 
-        self.original_image = original_image
+        self.original_image = params.original_image
         self.segmentation = segmentation
 
-        if segmentation_opacity > 1 or segmentation_opacity < 0:
+        if params.segmentation_opacity > 1 or params.segmentation_opacity < 0:
             raise ValueError('Opacity value for segmentation layer is not within required bounds (between 0 and 1).')
 
-        self.segmentation_colors = self.segmentation_colors_to_layer_argument(segmentation_colors)
-        self.segmentation_opacity = segmentation_opacity
+        self.segmentation_colors = self.segmentation_colors_to_layer_argument(params.segmentation_colors)
+        self.segmentation_opacity = params.segmentation_opacity
         self.segmentation_blending = segmentation_blending
-        self.segmentation_contour = segmentation_contour
+        self.segmentation_contour = params.segmentation_contour
 
-        if image_opacity > 1 or image_opacity < 0:
+        if params.image_opacity > 1 or params.image_opacity < 0:
             raise ValueError('Opacity value for original image layer is not within required bounds (between 0 and 1).')
 
-        if image_gamma < 0.2 or image_gamma > 2:
+        if params.image_gamma < 0.2 or params.image_gamma > 2:
             raise ValueError('Gamma value for original image layer is not within required bounds (between 0.2 and 2).')
 
-        self.image_opacity = image_opacity
-        self.image_gamma = image_gamma
+        self.image_opacity = params.image_opacity
+        self.image_gamma = params.image_gamma
         self.image_colormap = image_colormap
         self.image_blending = image_blending
 
-        self.border_color = border_color
-        self.border_width = border_width
+        self.border_color = params.border_color
+        self.border_width = params.border_width
 
-        self.text_color = text_color
-        self.text_size = text_size
+        self.text_color = params.text_color
+        self.text_size = params.text_size
         self.text_alignment = text_alignment
 
         self.image_data = load_nifti(self.original_image)
@@ -218,5 +220,3 @@ class NapariWindow:
 
         napari.run()
 
-
-NapariWindow(img_filepath, labels_filepath)
