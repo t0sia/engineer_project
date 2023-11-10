@@ -33,11 +33,18 @@ def open_file_dialog():
 root = tkinter.Tk()
 root.geometry("2000x1220")
 
+
+bg= tkinter.PhotoImage("bg_dark.png")
+img= tkinter.Label(root, image=bg)
+img.pack()
+
+bgexit = tkinter.PhotoImage("exit.png")
+
 ModeButton = tkinter.Button(root, text='Switch to light mode', command=dark_mode)
 ModeButton.place(x=30, y=30)
 
-UploadDialogButton = tkinter.Button(root, text='Upload new image', command=open_file_dialog)
-UploadDialogButton.place(x=30, y=70)
+UploadDialogButton = tkinter.Button(root, command=open_file_dialog, image=bgexit)
+# UploadDialogButton.place(x=30, y=70)
 
 tkinter.Label(root, text='Selected file: ').place(x=30, y=100)
 
