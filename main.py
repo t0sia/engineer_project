@@ -1,8 +1,13 @@
 import tkinter
 from tkinter.colorchooser import askcolor
 from tkinter.filedialog import askopenfile
-from napari_window import NapariWindow
+# from napari_window import NapariWindow
 from params import Params
+from settings_window import SettingsWindow
+
+is_dark_mode = False
+labels_filepath = './labels-31.nii'
+myParams = Params
 
 
 def dark_mode():
@@ -25,22 +30,16 @@ def dark_mode():
         is_dark_mode = False
 
 
-def set_text_color():
-    myParams.text_color = askcolor()
-
-
-def set_border_color():
-    myParams.border_color = askcolor()
-
 
 def open_file_dialog():
     myParams.original_image = askopenfile().name
 
 
 def start():
-    print("Start")
+    myParams.print_params(myParams)
     if myParams.original_image:
-        NapariWindow(labels_filepath, myParams)
+        print('start napari')
+        # NapariWindow(labels_filepath, myParams)
     else:
         label_upload_file = tkinter.Label(root, font=("Helvetica", 28), bg="red", text='Please upload file!')
         label_upload_file.place(x=400, y=600)
@@ -51,7 +50,7 @@ def open_seg_color_settings(seg):
 
 
 def open_seg_colors_dialog():
-    global bg, is_dark_mode, myParams
+    global is_dark_mode, myParams
     colors_window = tkinter.Toplevel(root)
     colors_window.title("Segmentation Colors")
     tkinter.Label(root, image=bg).pack()
@@ -96,72 +95,16 @@ def open_seg_colors_dialog():
 
 
 def open_settings_window():
-    global bg, is_dark_mode, myParams
-    settings_window = tkinter.Toplevel(root)
-    settings_window.title("Settings")
-    tkinter.Label(settings_window, image=bg).pack()
+    settings_window = SettingsWindow(is_dark_mode=is_dark_mode, params=myParams, root=root)
+    settings_window.open()
 
-    label_seg_colors_img = tkinter.PhotoImage(file="buttons_dark/segmentation-colors.png") if is_dark_mode else tkinter.PhotoImage(file="buttons_light/segmentation-colors.png")
-    seg_colors_label = tkinter.Label(settings_window, image=label_seg_colors_img)
-    seg_colors_label.place(x=100, y=32)
-    bt_select_colors_img = tkinter.PhotoImage(file="buttons_dark/select-colors-dialog.png") if is_dark_mode else tkinter.PhotoImage(file="buttons_light/select-colors-dialog.png")
-    bt_select_colors = tkinter.Button(settings_window, image=bt_select_colors_img, command=open_seg_colors_dialog)
-    bt_select_colors.place(x=800, y=32)
-
-    label_seg_opacity_img = tkinter.PhotoImage(file="buttons_dark/segmentation-opacity.png") if is_dark_mode else tkinter.PhotoImage(file="buttons_light/segmentation-opacity.png")
-    seg_opacity_label = tkinter.Label(settings_window, image=label_seg_opacity_img)
-    seg_opacity_label.place(x=100, y=102)
-    seg_opacity_scale = tkinter.Scale(settings_window, variable=myParams.segmentation_opacity, from_=0, to=1, length=400)
-    seg_opacity_scale.place(x=800, y=102)
-
-    label_seg_contour_img = tkinter.PhotoImage(file="buttons_dark/segmentation-contour.png") if is_dark_mode else tkinter.PhotoImage(file="buttons_light/segmentation-contour.png")
-    seg_contour_label = tkinter.Label(settings_window, image=label_seg_contour_img)
-    seg_contour_label.place(x=100, y=172)
-
-    label_img_opacity_img = tkinter.PhotoImage(file="buttons_dark/image-opacity.png") if is_dark_mode else tkinter.PhotoImage(file="buttons_light/image-opacity.png")
-    img_opacity_label = tkinter.Label(settings_window, image=label_img_opacity_img)
-    img_opacity_label.place(x=100, y=242)
-    img_opacity_scale = tkinter.Scale(settings_window, variable=myParams.image_opacity, from_=0, to=1, length=400)
-    img_opacity_scale.place(x=800, y=242)
-
-    label_img_gamma_img = tkinter.PhotoImage(file="buttons_dark/image-gamma.png") if is_dark_mode else tkinter.PhotoImage(file="buttons_light/image-gamma.png")
-    img_gamma_label = tkinter.Label(settings_window, image=label_img_gamma_img)
-    img_gamma_label.place(x=100, y=312)
-    img_gamma_scale = tkinter.Scale(settings_window, variable=myParams.image_gamma, from_=0.2, to=2, length=400)
-    img_gamma_scale.place(x=800, y=312)
-
-    label_border_color_img = tkinter.PhotoImage(file="buttons_dark/border-color.png") if is_dark_mode else tkinter.PhotoImage(file="buttons_light/border-color.png")
-    border_color_label = tkinter.Label(settings_window, image=label_border_color_img)
-    border_color_label.place(x=100, y=382)
-    bt_border_color_img = tkinter.PhotoImage(file="buttons_dark/select-color.png") if is_dark_mode else tkinter.PhotoImage(file="buttons_light/select-color.png")
-    bt_border_color = tkinter.Button(settings_window, image=bt_border_color_img, command=set_border_color)
-    bt_border_color.place(x=800, y=382)
-
-    label_border_width_img = tkinter.PhotoImage(file="buttons_dark/border-width.png") if is_dark_mode else tkinter.PhotoImage(file="buttons_light/border-width.png")
-    border_width_label = tkinter.Label(settings_window, image=label_border_width_img)
-    border_width_label.place(x=100, y=452)
-
-    label_text_color_img = tkinter.PhotoImage(file="buttons_dark/text-color.png") if is_dark_mode else tkinter.PhotoImage(file="buttons_light/text-color.png")
-    text_color_label = tkinter.Label(settings_window, image=label_text_color_img)
-    text_color_label.place(x=100, y=522)
-    bt_text_color_img = tkinter.PhotoImage(file="buttons_dark/select-color.png") if is_dark_mode else tkinter.PhotoImage(file="buttons_light/select-color.png")
-    bt_text_color = tkinter.Button(settings_window, image=bt_text_color_img, command=set_text_color)
-    bt_text_color.place(x=800, y=382)
-
-    label_text_size_img = tkinter.PhotoImage(file="buttons_dark/text-size.png") if is_dark_mode else tkinter.PhotoImage(file="buttons_light/text-size.png")
-    text_size_label = tkinter.Label(settings_window, image=label_text_size_img)
-    text_size_label.place(x=100, y=592)
-
-
-is_dark_mode = False
-labels_filepath = './labels-31.nii'
-myParams = Params
 
 root = tkinter.Tk()
 root.geometry("1200x675")
 
 bg = tkinter.PhotoImage(file="backgrounds/light.png")
 bg_dark = tkinter.PhotoImage(file="backgrounds/dark.png")
+
 img = tkinter.Label(root, image=bg)
 img.pack()
 
