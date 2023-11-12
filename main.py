@@ -1,7 +1,7 @@
 import tkinter
 from tkinter.colorchooser import askcolor
 from tkinter.filedialog import askopenfile
-from napari_window import NapariWindow
+# from napari_window import NapariWindow
 from params import Params
 from settings_window import SettingsWindow
 
@@ -37,14 +37,16 @@ def open_file_dialog():
 def open_instructions_dialog():
     instructions_window = tkinter.Toplevel()
     instructions_window.configure(bg='black')
-    tkinter.Label(instructions_window, font=("Helvetica", 16),
+    instructions_window.geometry("600x600")
+    tkinter.Label(instructions_window, font=("Helvetica", 16), bg='black', fg='white',
                   text="jakaś instrukcja bla bla bla literki").place(x=20, y=20)
 
 
 def start():
     myParams.print_params(myParams)
     if myParams.original_image:
-        NapariWindow(labels_filepath, myParams)
+        print('staysta')
+        # NapariWindow(labels_filepath, myParams)
     else:
         label_upload_file = tkinter.Label(root, font=("Helvetica", 16), bg="red", text='Please upload file!')
         label_upload_file.place(x=400, y=600)
@@ -80,26 +82,26 @@ StartButton.place(x=400, y=35)
 bt_add_file_img = tkinter.PhotoImage(file="buttons_light/add-file.png")
 bt_add_file_img_dark = tkinter.PhotoImage(file="buttons_dark/add-file.png")
 AddFileButton = tkinter.Button(root, command=open_file_dialog, image=bt_add_file_img, bd=0)
-AddFileButton.place(x=400, y=120)
+AddFileButton.place(x=400, y=125)
 
 bt_settings_img = tkinter.PhotoImage(file="buttons_light/settings.png")
 bt_settings_img_dark = tkinter.PhotoImage(file="buttons_dark/settings.png")
 SettingsButton = tkinter.Button(root, command=open_settings_window, image=bt_settings_img, bd=0)
-SettingsButton.place(x=400, y=205)
+SettingsButton.place(x=400, y=215)
 
 bt_instruction_img = tkinter.PhotoImage(file="buttons_light/instruction.png")
 bt_instruction_img_dark = tkinter.PhotoImage(file="buttons_dark/instruction.png")
-InstructionDialogButton = tkinter.Button(root, image=bt_instruction_img, bd=0)
-InstructionDialogButton.place(x=400, y=290)
+InstructionDialogButton = tkinter.Button(root, command=open_instructions_dialog, image=bt_instruction_img, bd=0)
+InstructionDialogButton.place(x=400, y=305)
 
 bt_mode_img = tkinter.PhotoImage(file="buttons_light/dark-mode.png")
 bt_mode_img_dark = tkinter.PhotoImage(file="buttons_dark/light-mode.png")
 DarkModeButton = tkinter.Button(root, command=dark_mode, image=bt_mode_img, bd=0)
-DarkModeButton.place(x=400, y=375)
+DarkModeButton.place(x=400, y=395)
 
 bt_download_img = tkinter.PhotoImage(file="buttons_light/download.png")
 bt_download_img_dark = tkinter.PhotoImage(file="buttons_dark/download.png")
 DownloadButton = tkinter.Button(root, command=download, image=bt_download_img, bd=0)
-DownloadButton.place(x=400, y=460)
+DownloadButton.place(x=400, y=485)
 
 root.mainloop()

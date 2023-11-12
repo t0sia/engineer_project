@@ -74,7 +74,7 @@ class SettingsWindow:
     def open(self):
         seg_colors_label = tkinter.Label(self.settings_window, image=self.label_seg_colors_img)
         seg_colors_label.place(x=100, y=32)
-        bt_select_colors = tkinter.Button(self.settings_window, image=self.bt_select_colors_img)
+        bt_select_colors = tkinter.Button(self.settings_window, image=self.bt_select_colors_img, command=self.open_seg_colors_dialog)
         bt_select_colors.place(x=800, y=32)
 
         seg_opacity_label = tkinter.Label(self.settings_window, image=self.label_seg_opacity_img)
