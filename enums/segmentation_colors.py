@@ -5,13 +5,15 @@ from napari_color_format import NapariColorFormat
 # each of the organs included in the
 # segmentations
 class SegmentationColors:
-    def __init__(self,
-                 liver_color: NapariColorFormat,
-                 bladder_color: NapariColorFormat,
-                 lungs_color: NapariColorFormat,
-                 kidneys_color: NapariColorFormat,
-                 bone_color: NapariColorFormat,
-                 brain_color: NapariColorFormat):
+    def __init__(
+        self,
+        liver_color: NapariColorFormat,
+        bladder_color: NapariColorFormat,
+        lungs_color: NapariColorFormat,
+        kidneys_color: NapariColorFormat,
+        bone_color: NapariColorFormat,
+        brain_color: NapariColorFormat,
+    ):
         self.liver_color = liver_color
         self.bladder_color = bladder_color
         self.lungs_color = lungs_color
