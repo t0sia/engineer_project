@@ -1,11 +1,11 @@
 import tkinter
 from tkinter.colorchooser import askcolor
 from tkinter import HORIZONTAL
+from colors_window import ColorsWindow
 
 
 class SettingsWindow:
-    def __init__(self, root, params, is_dark_mode):
-        self.root = root
+    def __init__(self, params, is_dark_mode):
         self.params = params
         self.is_dark_mode = is_dark_mode
 
@@ -66,6 +66,10 @@ class SettingsWindow:
 
     def set_border_color(self):
         self.params.border_color = askcolor()[1]
+
+    def open_seg_colors_dialog(self):
+        color_window = ColorsWindow(is_dark_mode=self.is_dark_mode, params=self.params)
+        color_window.open()
 
     def open(self):
         seg_colors_label = tkinter.Label(self.settings_window, image=self.label_seg_colors_img)

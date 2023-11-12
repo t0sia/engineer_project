@@ -15,3 +15,6 @@ class NapariColorFormat:
     # returns RGBA array from class instance
     def to_rgba_array(self):
         return [self.red, self.green, self.blue, self.alpha]
+
+    def to_rgb(self):
+        return '#' + str(self.red) + str(self.green) + str(self.blue) + str(self.alpha)

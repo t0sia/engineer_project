@@ -1,7 +1,7 @@
 import tkinter
 from tkinter.colorchooser import askcolor
 from tkinter.filedialog import askopenfile
-# from napari_window import NapariWindow
+from napari_window import NapariWindow
 from params import Params
 from settings_window import SettingsWindow
 
@@ -30,18 +30,23 @@ def dark_mode():
         is_dark_mode = False
 
 
-
 def open_file_dialog():
     myParams.original_image = askopenfile().name
+
+
+def open_instructions_dialog():
+    instructions_window = tkinter.Toplevel()
+    instructions_window.configure(bg='black')
+    tkinter.Label(instructions_window, font=("Helvetica", 16),
+                  text="jakaś instrukcja bla bla bla literki").place(x=20, y=20)
 
 
 def start():
     myParams.print_params(myParams)
     if myParams.original_image:
-        print('start napari')
-        # NapariWindow(labels_filepath, myParams)
+        NapariWindow(labels_filepath, myParams)
     else:
-        label_upload_file = tkinter.Label(root, font=("Helvetica", 28), bg="red", text='Please upload file!')
+        label_upload_file = tkinter.Label(root, font=("Helvetica", 16), bg="red", text='Please upload file!')
         label_upload_file.place(x=400, y=600)
 
 
@@ -49,54 +54,13 @@ def open_seg_color_settings(seg):
     seg = askcolor()
 
 
-def open_seg_colors_dialog():
-    global is_dark_mode, myParams
-    colors_window = tkinter.Toplevel(root)
-    colors_window.title("Segmentation Colors")
-    tkinter.Label(root, image=bg).pack()
-
-    bt_select_color_img = tkinter.PhotoImage(file="buttons_dark/select-color.png") if is_dark_mode else tkinter.PhotoImage(file="buttons_light/select-color.png")
-
-    label_liver_img = tkinter.PhotoImage(file="buttons_dark/liver.png") if is_dark_mode else tkinter.PhotoImage(file="buttons_light/liver.png")
-    liver_label = tkinter.Label(colors_window, image=label_liver_img)
-    liver_label.place(x=200, y=100)
-    bt_select_color_liver = tkinter.Button(colors_window, image=bt_select_color_img, command=lambda: open_seg_color_settings(myParams.segmentation_colors.liver_color))
-    bt_select_color_liver.place(x=800, y=100)
-
-    label_kidneys_img = tkinter.PhotoImage(file="buttons_dark/kidneys.png") if is_dark_mode else tkinter.PhotoImage(file="buttons_light/kidneys.png")
-    kidneys_label = tkinter.Label(colors_window, image=label_kidneys_img)
-    kidneys_label.place(x=200, y=170)
-    bt_select_color_kidneys = tkinter.Button(colors_window, image=bt_select_color_img, command=lambda: open_seg_color_settings(myParams.segmentation_colors.kidneys_color))
-    bt_select_color_kidneys.place(x=800, y=170)
-
-    label_bladder_img = tkinter.PhotoImage(file="buttons_dark/bladder.png") if is_dark_mode else tkinter.PhotoImage(file="buttons_light/bladder.png")
-    bladder_label = tkinter.Label(colors_window, image=label_bladder_img)
-    bladder_label.place(x=200, y=240)
-    bt_select_color_bladder = tkinter.Button(colors_window, image=bt_select_color_img, command=lambda: open_seg_color_settings(myParams.segmentation_colors.bladder_color))
-    bt_select_color_bladder.place(x=800, y=240)
-
-    label_lungs_img = tkinter.PhotoImage(file="buttons_dark/lungs.png") if is_dark_mode else tkinter.PhotoImage(file="buttons_light/lungs.png")
-    lungs_label = tkinter.Label(colors_window, image=label_lungs_img)
-    lungs_label.place(x=200, y=310)
-    bt_select_color_lungs = tkinter.Button(colors_window, image=bt_select_color_img, command=lambda: open_seg_color_settings(myParams.segmentation_colors.lungs_color))
-    bt_select_color_lungs.place(x=800, y=310)
-
-    label_brain_img = tkinter.PhotoImage(file="buttons_dark/brain.png") if is_dark_mode else tkinter.PhotoImage(file="buttons_light/brain.png")
-    brain_label = tkinter.Label(colors_window, image=label_brain_img)
-    brain_label.place(x=200, y=380)
-    bt_select_color_brain = tkinter.Button(colors_window, image=bt_select_color_img, command=lambda: open_seg_color_settings(myParams.segmentation_colors.brain_color))
-    bt_select_color_brain.place(x=800, y=380)
-
-    label_bone_img = tkinter.PhotoImage(file="buttons_dark/bone.png") if is_dark_mode else tkinter.PhotoImage(file="buttons_light/bone.png")
-    bone_label = tkinter.Label(colors_window, image=label_bone_img)
-    bone_label.place(x=200, y=450)
-    bt_select_color_bone = tkinter.Button(colors_window, image=bt_select_color_img, command=lambda: open_seg_color_settings(myParams.segmentation_colors.bone_color))
-    bt_select_color_bone.place(x=800, y=450)
-
-
 def open_settings_window():
-    settings_window = SettingsWindow(is_dark_mode=is_dark_mode, params=myParams, root=root)
+    settings_window = SettingsWindow(is_dark_mode=is_dark_mode, params=myParams)
     settings_window.open()
+
+
+def download():
+    print('pobieranko tralalalal')
 
 
 root = tkinter.Tk()
@@ -110,28 +74,32 @@ img.pack()
 
 bt_start_img = tkinter.PhotoImage(file="buttons_light/start.png")
 bt_start_img_dark = tkinter.PhotoImage(file="buttons_dark/start.png")
-StartButton = tkinter.Button(root, command=start, image=bt_start_img)
-StartButton.place(x=400, y=50)
+StartButton = tkinter.Button(root, command=start, image=bt_start_img, bd=0)
+StartButton.place(x=400, y=35)
 
 bt_add_file_img = tkinter.PhotoImage(file="buttons_light/add-file.png")
 bt_add_file_img_dark = tkinter.PhotoImage(file="buttons_dark/add-file.png")
-AddFileButton = tkinter.Button(root, command=open_file_dialog, image=bt_add_file_img)
-AddFileButton.place(x=400, y=160)
+AddFileButton = tkinter.Button(root, command=open_file_dialog, image=bt_add_file_img, bd=0)
+AddFileButton.place(x=400, y=120)
 
 bt_settings_img = tkinter.PhotoImage(file="buttons_light/settings.png")
 bt_settings_img_dark = tkinter.PhotoImage(file="buttons_dark/settings.png")
-SettingsButton = tkinter.Button(root, command=open_settings_window, image=bt_settings_img)
-SettingsButton.place(x=400, y=270)
+SettingsButton = tkinter.Button(root, command=open_settings_window, image=bt_settings_img, bd=0)
+SettingsButton.place(x=400, y=205)
 
 bt_instruction_img = tkinter.PhotoImage(file="buttons_light/instruction.png")
 bt_instruction_img_dark = tkinter.PhotoImage(file="buttons_dark/instruction.png")
-InstructionDialogButton = tkinter.Button(root, image=bt_instruction_img)
-InstructionDialogButton.place(x=400, y=380)
+InstructionDialogButton = tkinter.Button(root, image=bt_instruction_img, bd=0)
+InstructionDialogButton.place(x=400, y=290)
 
 bt_mode_img = tkinter.PhotoImage(file="buttons_light/dark-mode.png")
 bt_mode_img_dark = tkinter.PhotoImage(file="buttons_dark/light-mode.png")
-DarkModeButton = tkinter.Button(root, command=dark_mode, image=bt_mode_img)
-DarkModeButton.place(x=400, y=490)
+DarkModeButton = tkinter.Button(root, command=dark_mode, image=bt_mode_img, bd=0)
+DarkModeButton.place(x=400, y=375)
+
+bt_download_img = tkinter.PhotoImage(file="buttons_light/download.png")
+bt_download_img_dark = tkinter.PhotoImage(file="buttons_dark/download.png")
+DownloadButton = tkinter.Button(root, command=download, image=bt_download_img, bd=0)
+DownloadButton.place(x=400, y=460)
 
 root.mainloop()
-
