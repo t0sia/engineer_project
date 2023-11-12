@@ -1,7 +1,7 @@
 import tkinter
 from tkinter.colorchooser import askcolor
 from tkinter.filedialog import askopenfile
-# from napari_window import NapariWindow
+from napari_window import NapariWindow
 from params import Params
 from settings_window import SettingsWindow
 
@@ -19,6 +19,7 @@ def dark_mode():
         InstructionDialogButton.config(image=bt_instruction_img_dark)
         SettingsButton.config(image=bt_settings_img_dark)
         DarkModeButton.config(image=bt_mode_img_dark)
+        DownloadButton.config(image=bt_download_img_dark)
         is_dark_mode = True
     else:
         img.config(image=bg)
@@ -27,6 +28,7 @@ def dark_mode():
         InstructionDialogButton.config(image=bt_instruction_img)
         SettingsButton.config(image=bt_settings_img)
         DarkModeButton.config(image=bt_mode_img)
+        DownloadButton.config(image=bt_download_img)
         is_dark_mode = False
 
 
@@ -45,8 +47,7 @@ def open_instructions_dialog():
 def start():
     myParams.print_params(myParams)
     if myParams.original_image:
-        print('staysta')
-        # NapariWindow(labels_filepath, myParams)
+        NapariWindow(labels_filepath, myParams)
     else:
         label_upload_file = tkinter.Label(root, font=("Helvetica", 16), bg="red", text='Please upload file!')
         label_upload_file.place(x=400, y=600)

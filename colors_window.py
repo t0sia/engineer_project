@@ -33,7 +33,7 @@ class ColorsWindow:
             file="buttons_dark/select-color.png") if is_dark_mode else tkinter.PhotoImage(
             file="buttons_light/select-color.png")
 
-        self.labels: tkinter.Label = [
+        self.labels = [
             tkinter.Label(self.colors_window, height=3, width=8,
                           bg=self.params.segmentation_colors.liver_color.hex_code),
             tkinter.Label(self.colors_window, height=3, width=8,
@@ -58,7 +58,7 @@ class ColorsWindow:
         self.labels[label_number].configure(bg=color[1])
 
     def open(self):
-        self.labels: tkinter.Label = [
+        self.labels = [
             tkinter.Label(self.colors_window, height=3, width=8,
                           bg=self.params.segmentation_colors.liver_color.hex_code),
             tkinter.Label(self.colors_window, height=3, width=8,
