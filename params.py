@@ -19,7 +19,7 @@ class Params:
         brain_color=NapariColorFormat("#FF4500"),
     )
     segmentation_opacity = 0.8
-    segmentation_contour = 2
+    segmentation_contour = 10
     image_opacity = 0.7
     image_gamma = 1
     border_color = "green"

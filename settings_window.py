@@ -11,6 +11,9 @@ class SettingsWindow:
 
         self.settings_window = tkinter.Toplevel()
 
+        self.text_sizes = ["6", "12", "14", "16", "18", "24", "32", "48"]
+        self.text_size_str = tkinter.StringVar(self.settings_window, "6", "name1234")
+
         self.bg = (
             tkinter.PhotoImage(file="backgrounds/dark.png")
             if self.is_dark_mode
@@ -78,19 +81,22 @@ class SettingsWindow:
         img_bg.pack()
 
     def gamma_scale(self, var):
-        self.params.image_gamma = var
+        self.params.image_gamma = float(var)
 
     def img_opacity_scale(self, var):
-        self.params.image_opacity = var
+        self.params.image_opacity = float(var)
 
     def seg_opacity_scale(self, var):
-        self.params.segmentation_opacity = var
+        self.params.segmentation_opacity = float(var)
 
     def set_text_color(self):
-        self.params.text_color = askcolor()[1]
+        self.params.text_color = askcolor(parent=self.settings_window)[1]
 
     def set_border_color(self):
-        self.params.border_color = askcolor()[1]
+        self.params.border_color = askcolor(parent=self.settings_window)[1]
+
+    def set_text_size(self, var):
+        self.params.text_size = int(var)
 
     def open_seg_colors_dialog(self):
         color_window = ColorsWindow(is_dark_mode=self.is_dark_mode, params=self.params)
@@ -189,5 +195,14 @@ class SettingsWindow:
             self.settings_window, image=self.label_text_size_img
         )
         text_size_label.place(x=100, y=592)
+
+        option_menu = tkinter.OptionMenu(
+            self.settings_window,
+            self.text_size_str,
+            self.text_sizes[0],
+            *self.text_sizes,
+            command=self.set_text_size)
+
+        option_menu.place(x=800, y=592)
 
         self.settings_window.mainloop()

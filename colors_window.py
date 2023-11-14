@@ -94,9 +94,20 @@ class ColorsWindow:
         img_bg = tkinter.Label(self.colors_window, image=self.bg)
         img_bg.pack()
 
-    def open_seg_color_settings(self, seg, label_number):
-        color = askcolor()
-        seg = NapariColorFormat(color[1])
+    def open_seg_color_settings(self, label_number):
+        color = askcolor(parent=self.colors_window)
+        if label_number == 0:
+            self.params.segmentation_colors.liver_color = NapariColorFormat(color[1])
+        if label_number == 1:
+            self.params.segmentation_colors.kidneys_color = NapariColorFormat(color[1])
+        if label_number == 2:
+            self.params.segmentation_colors.bladder_color = NapariColorFormat(color[1])
+        if label_number == 3:
+            self.params.segmentation_colors.lungs_color = NapariColorFormat(color[1])
+        if label_number == 4:
+            self.params.segmentation_colors.brain_color = NapariColorFormat(color[1])
+        if label_number == 5:
+            self.params.segmentation_colors.bone_color = NapariColorFormat(color[1])
         self.labels[label_number].configure(bg=color[1])
 
     def open(self):
@@ -145,9 +156,7 @@ class ColorsWindow:
         bt_select_color_liver = tkinter.Button(
             self.colors_window,
             image=self.bt_select_color_img,
-            command=lambda: self.open_seg_color_settings(
-                self.params.segmentation_colors.liver_color, 0
-            ),
+            command=lambda: self.open_seg_color_settings(0),
         )
         bt_select_color_liver.place(x=800, y=100)
         self.labels[0].place(x=700, y=100)
@@ -157,9 +166,7 @@ class ColorsWindow:
         bt_select_color_kidneys = tkinter.Button(
             self.colors_window,
             image=self.bt_select_color_img,
-            command=lambda: self.open_seg_color_settings(
-                self.params.segmentation_colors.kidneys_color, 1
-            ),
+            command=lambda: self.open_seg_color_settings(1),
         )
         bt_select_color_kidneys.place(x=800, y=170)
         self.labels[1].place(x=700, y=170)
@@ -169,9 +176,7 @@ class ColorsWindow:
         bt_select_color_bladder = tkinter.Button(
             self.colors_window,
             image=self.bt_select_color_img,
-            command=lambda: self.open_seg_color_settings(
-                self.params.segmentation_colors.bladder_color, 2
-            ),
+            command=lambda: self.open_seg_color_settings(2),
         )
         bt_select_color_bladder.place(x=800, y=240)
         self.labels[2].place(x=700, y=240)
@@ -181,9 +186,7 @@ class ColorsWindow:
         bt_select_color_lungs = tkinter.Button(
             self.colors_window,
             image=self.bt_select_color_img,
-            command=lambda: self.open_seg_color_settings(
-                self.params.segmentation_colors.lungs_color, 3
-            ),
+            command=lambda: self.open_seg_color_settings(3),
         )
         bt_select_color_lungs.place(x=800, y=310)
         self.labels[3].place(x=700, y=310)
@@ -193,9 +196,7 @@ class ColorsWindow:
         bt_select_color_brain = tkinter.Button(
             self.colors_window,
             image=self.bt_select_color_img,
-            command=lambda: self.open_seg_color_settings(
-                self.params.segmentation_colors.brain_color, 4
-            ),
+            command=lambda: self.open_seg_color_settings(4),
         )
         bt_select_color_brain.place(x=800, y=380)
         self.labels[4].place(x=700, y=380)
@@ -205,9 +206,7 @@ class ColorsWindow:
         bt_select_color_bone = tkinter.Button(
             self.colors_window,
             image=self.bt_select_color_img,
-            command=lambda: self.open_seg_color_settings(
-                self.params.segmentation_colors.bone_color, 5
-            ),
+            command=lambda: self.open_seg_color_settings(5),
         )
         bt_select_color_bone.place(x=800, y=450)
         self.labels[5].place(x=700, y=450)

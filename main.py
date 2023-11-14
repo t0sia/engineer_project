@@ -45,7 +45,7 @@ def open_instructions_dialog():
         font=("Helvetica", 16),
         bg="black",
         fg="white",
-        text="jakaś instrukcja bla bla bla literki",
+        text="jakaś instrukcja bla bla bla",
     ).place(x=20, y=20)
 
 
