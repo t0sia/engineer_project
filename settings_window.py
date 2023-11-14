@@ -12,7 +12,9 @@ class SettingsWindow:
         self.settings_window = tkinter.Toplevel()
 
         self.text_sizes = ["6", "12", "14", "16", "18", "24", "32", "48"]
-        self.text_size_str = tkinter.StringVar(self.settings_window, "6", "name1234")
+        self.text_size_str = tkinter.StringVar(self.settings_window, "6", "txt-size")
+        self.border_width_str = tkinter.StringVar(self.settings_window, "5", "border-width")
+        self.seg_contour_str = tkinter.StringVar(self.settings_window, "1", "seg-contour")
 
         self.bg = (
             tkinter.PhotoImage(file="backgrounds/dark.png")
@@ -95,6 +97,21 @@ class SettingsWindow:
     def set_border_color(self):
         self.params.border_color = askcolor(parent=self.settings_window)[1]
 
+    def set_border_width(self):
+        if self.border_width_str.get().isnumeric():
+            self.params.border_width = int(self.border_width_str.get())
+            return True
+        else:
+            return False
+
+    def set_seg_contour(self):
+        print(self.seg_contour_str.get())
+        if self.seg_contour_str.get().isnumeric():
+            self.params.segmentation_contour = int(self.seg_contour_str.get())
+            return True
+        else:
+            return False
+
     def set_text_size(self, var):
         self.params.text_size = int(var)
 
@@ -134,6 +151,16 @@ class SettingsWindow:
         )
         seg_contour_label.place(x=100, y=172)
 
+        seg_contour_input = tkinter.Entry(
+            self.settings_window,
+            font=("Helvetica", 20),
+            textvariable=self.seg_contour_str,
+            validatecommand=self.set_seg_contour,
+            validate="focusout",
+            bd=0
+        )
+        seg_contour_input.place(x=800, y=172)
+
         img_opacity_label = tkinter.Label(
             self.settings_window, image=self.label_img_opacity_img
         )
@@ -171,7 +198,7 @@ class SettingsWindow:
         bt_border_color = tkinter.Button(
             self.settings_window,
             image=self.bt_select_color_img,
-            command=self.set_border_color,
+            command=self.set_border_color
         )
         bt_border_color.place(x=800, y=382)
 
@@ -179,6 +206,16 @@ class SettingsWindow:
             self.settings_window, image=self.label_border_width_img
         )
         border_width_label.place(x=100, y=452)
+
+        border_width_input = tkinter.Entry(
+            self.settings_window,
+            font=("Helvetica", 20),
+            textvariable=self.border_width_str,
+            validatecommand=self.set_border_width,
+            validate="focusout",
+            bd=0
+        )
+        border_width_input.place(x=800, y=452)
 
         text_color_label = tkinter.Label(
             self.settings_window, image=self.label_text_color_img
@@ -201,7 +238,8 @@ class SettingsWindow:
             self.text_size_str,
             self.text_sizes[0],
             *self.text_sizes,
-            command=self.set_text_size)
+            command=self.set_text_size
+        )
 
         option_menu.place(x=800, y=592)
 
