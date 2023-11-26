@@ -1,12 +1,13 @@
 import tkinter
 from tkinter.colorchooser import askcolor
 from tkinter.filedialog import askopenfile
+
+from model_inferer import infer_with_model
 from napari_window import NapariWindow
 from params import Params
 from settings_window import SettingsWindow
 
 is_dark_mode = False
-labels_filepath = "./labels-31.nii.gz"
 myParams = Params
 
 
@@ -52,6 +53,10 @@ def open_instructions_dialog():
 def start():
     myParams.print_params(myParams)
     if myParams.original_image:
+        # TODO: use result instead of reading the file once again, but the inference takes so long that no one cares tbh
+        _result, labels_filepath = infer_with_model(
+            myParams.original_image, "infered_images"
+        )
         NapariWindow(labels_filepath, myParams)
     else:
         label_upload_file = tkinter.Label(

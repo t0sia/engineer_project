@@ -13,8 +13,12 @@ class SettingsWindow:
 
         self.text_sizes = ["6", "12", "14", "16", "18", "24", "32", "48"]
         self.text_size_str = tkinter.StringVar(self.settings_window, "6", "txt-size")
-        self.border_width_str = tkinter.StringVar(self.settings_window, "5", "border-width")
-        self.seg_contour_str = tkinter.StringVar(self.settings_window, "1", "seg-contour")
+        self.border_width_str = tkinter.StringVar(
+            self.settings_window, "5", "border-width"
+        )
+        self.seg_contour_str = tkinter.StringVar(
+            self.settings_window, "1", "seg-contour"
+        )
 
         self.bg = (
             tkinter.PhotoImage(file="backgrounds/dark.png")
@@ -157,7 +161,7 @@ class SettingsWindow:
             textvariable=self.seg_contour_str,
             validatecommand=self.set_seg_contour,
             validate="focusout",
-            bd=0
+            bd=0,
         )
         seg_contour_input.place(x=800, y=172)
 
@@ -198,7 +202,7 @@ class SettingsWindow:
         bt_border_color = tkinter.Button(
             self.settings_window,
             image=self.bt_select_color_img,
-            command=self.set_border_color
+            command=self.set_border_color,
         )
         bt_border_color.place(x=800, y=382)
 
@@ -213,7 +217,7 @@ class SettingsWindow:
             textvariable=self.border_width_str,
             validatecommand=self.set_border_width,
             validate="focusout",
-            bd=0
+            bd=0,
         )
         border_width_input.place(x=800, y=452)
 

@@ -12,9 +12,6 @@ from napari_color_format import NapariColorFormat
 from enums.segmentation_colors import SegmentationColors
 from params import Params
 
-labels_filepath = "./labels-31.nii.gz"
-img_filepath = "./volume-31.nii.gz"
-
 
 class NapariWindow:
     # creates bounding box corners from segmentations array
@@ -146,14 +143,8 @@ class NapariWindow:
         self.text_alignment = text_alignment
 
         self.image_data = load_nifti(self.original_image)
-        write_single_image(
-            self.original_image, self.image_data["image"], self.image_data["metadata"]
-        )
-
         self.label_data = load_nifti(self.segmentation)
-        write_single_image(
-            self.segmentation, self.label_data["image"], self.label_data["metadata"]
-        )
+        self.label_data["image"] = self.label_data["image"].astype(int)
 
         if self.image_data["image"].shape != self.label_data["image"].shape:
             raise ValueError("Segmentation is of different dimensions than input image")
