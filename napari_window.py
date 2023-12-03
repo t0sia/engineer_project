@@ -62,7 +62,7 @@ class NapariWindow:
         # path to original image in .nii.gz format
         # original_image,
         # path to segmentation image in .nii.gz format
-        segmentation,
+        # segmentation,
         params,
         # colors for each of the organs
         # segmentation_colors = SegmentationColors(
@@ -106,7 +106,7 @@ class NapariWindow:
         text_alignment=TextAlignment.center.name,
     ):
         self.original_image = params.original_image
-        self.segmentation = segmentation
+        self.segmentation = params.segmentation
 
         if params.segmentation_opacity > 1 or params.segmentation_opacity < 0:
             raise ValueError(

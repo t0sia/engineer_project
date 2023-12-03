@@ -4,6 +4,9 @@ from enums.segmentation_colors import SegmentationColors
 
 class Params:
     original_image = None
+    segmentation = None
+    path_to_save = "infered_images"
+
     segmentation_colors = SegmentationColors(
         # aqua marine
         liver_color=NapariColorFormat("#7FFFD4"),

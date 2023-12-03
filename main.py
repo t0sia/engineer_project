@@ -1,10 +1,10 @@
 import tkinter
 from tkinter.colorchooser import askcolor
 from tkinter.filedialog import askopenfile
-
-from model_inferer import infer_with_model
 from napari_window import NapariWindow
+
 from params import Params
+from save_segmentation_window import SaveSegmentationWindow
 from settings_window import SettingsWindow
 
 is_dark_mode = False
@@ -17,6 +17,7 @@ def dark_mode():
         img.config(image=bg_dark)
         StartButton.config(image=bt_start_img_dark)
         AddFileButton.config(image=bt_add_file_img_dark)
+        AddFileButtonPrim.config(image=bt_add_file_img_dark)
         InstructionDialogButton.config(image=bt_instruction_img_dark)
         SettingsButton.config(image=bt_settings_img_dark)
         DarkModeButton.config(image=bt_mode_img_dark)
@@ -37,6 +38,10 @@ def open_file_dialog():
     myParams.original_image = askopenfile().name
 
 
+def open_file_dialog_prim():
+    myParams.segmentation = askopenfile().name
+
+
 def open_instructions_dialog():
     instructions_window = tkinter.Toplevel()
     instructions_window.configure(bg="black")
@@ -50,23 +55,19 @@ def open_instructions_dialog():
     ).place(x=20, y=20)
 
 
-def start():
+def start(root):
     myParams.print_params(myParams)
     if myParams.original_image:
-        # TODO: use result instead of reading the file once again, but the inference takes so long that no one cares tbh
-        _result, labels_filepath = infer_with_model(
-            myParams.original_image, "infered_images"
-        )
-        NapariWindow(labels_filepath, myParams)
+        if not myParams.segmentation:
+            save_segmentation_window = SaveSegmentationWindow(is_dark_mode=is_dark_mode, params=myParams)
+            save_segmentation_window.open()
+        else:
+            NapariWindow(myParams)
     else:
         label_upload_file = tkinter.Label(
             root, font=("Helvetica", 16), bg="red", text="Please upload file!"
         )
         label_upload_file.place(x=400, y=600)
-
-
-def open_seg_color_settings(seg):
-    seg = askcolor()
 
 
 def open_settings_window():
@@ -90,7 +91,7 @@ if __name__ == "__main__":
 
     bt_start_img = tkinter.PhotoImage(file="buttons_light/start.png")
     bt_start_img_dark = tkinter.PhotoImage(file="buttons_dark/start.png")
-    StartButton = tkinter.Button(root, command=start, image=bt_start_img, bd=0)
+    StartButton = tkinter.Button(root, command=lambda: start(root), image=bt_start_img, bd=0)
     StartButton.place(x=400, y=35)
 
     bt_add_file_img = tkinter.PhotoImage(file="buttons_light/add-file.png")
@@ -98,30 +99,37 @@ if __name__ == "__main__":
     AddFileButton = tkinter.Button(
         root, command=open_file_dialog, image=bt_add_file_img, bd=0
     )
-    AddFileButton.place(x=400, y=125)
+    AddFileButton.place(x=400, y=115)
+
+    bt_add_file_img_prim = tkinter.PhotoImage(file="buttons_light/add-file.png")
+    bt_add_file_img_dark_prim = tkinter.PhotoImage(file="buttons_dark/add-file.png")
+    AddFileButtonPrim = tkinter.Button(
+        root, command=open_file_dialog_prim, image=bt_add_file_img_prim, bd=0
+    )
+    AddFileButtonPrim.place(x=400, y=195)
 
     bt_settings_img = tkinter.PhotoImage(file="buttons_light/settings.png")
     bt_settings_img_dark = tkinter.PhotoImage(file="buttons_dark/settings.png")
     SettingsButton = tkinter.Button(
         root, command=open_settings_window, image=bt_settings_img, bd=0
     )
-    SettingsButton.place(x=400, y=215)
+    SettingsButton.place(x=400, y=275)
 
     bt_instruction_img = tkinter.PhotoImage(file="buttons_light/instruction.png")
     bt_instruction_img_dark = tkinter.PhotoImage(file="buttons_dark/instruction.png")
     InstructionDialogButton = tkinter.Button(
         root, command=open_instructions_dialog, image=bt_instruction_img, bd=0
     )
-    InstructionDialogButton.place(x=400, y=305)
+    InstructionDialogButton.place(x=400, y=355)
 
     bt_mode_img = tkinter.PhotoImage(file="buttons_light/dark-mode.png")
     bt_mode_img_dark = tkinter.PhotoImage(file="buttons_dark/light-mode.png")
     DarkModeButton = tkinter.Button(root, command=dark_mode, image=bt_mode_img, bd=0)
-    DarkModeButton.place(x=400, y=395)
+    DarkModeButton.place(x=400, y=435)
 
     bt_download_img = tkinter.PhotoImage(file="buttons_light/download.png")
     bt_download_img_dark = tkinter.PhotoImage(file="buttons_dark/download.png")
     DownloadButton = tkinter.Button(root, command=download, image=bt_download_img, bd=0)
-    DownloadButton.place(x=400, y=485)
+    DownloadButton.place(x=400, y=505)
 
     root.mainloop()
