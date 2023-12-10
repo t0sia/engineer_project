@@ -17,7 +17,7 @@ def dark_mode():
         img.config(image=bg_dark)
         StartButton.config(image=bt_start_img_dark)
         AddFileButton.config(image=bt_add_file_img_dark)
-        AddFileButtonPrim.config(image=bt_add_file_img_dark)
+        UploadModelButton.config(image=bt_upload_model_img_dark)
         InstructionDialogButton.config(image=bt_instruction_img_dark)
         SettingsButton.config(image=bt_settings_img_dark)
         DarkModeButton.config(image=bt_mode_img_dark)
@@ -27,6 +27,7 @@ def dark_mode():
         img.config(image=bg)
         StartButton.config(image=bt_start_img)
         AddFileButton.config(image=bt_add_file_img)
+        UploadModelButton.config(image=bt_upload_model_img)
         InstructionDialogButton.config(image=bt_instruction_img)
         SettingsButton.config(image=bt_settings_img)
         DarkModeButton.config(image=bt_mode_img)
@@ -101,12 +102,12 @@ if __name__ == "__main__":
     )
     AddFileButton.place(x=400, y=115)
 
-    bt_add_file_img_prim = tkinter.PhotoImage(file="buttons_light/add-file.png")
-    bt_add_file_img_dark_prim = tkinter.PhotoImage(file="buttons_dark/add-file.png")
-    AddFileButtonPrim = tkinter.Button(
-        root, command=open_file_dialog_prim, image=bt_add_file_img_prim, bd=0
+    bt_upload_model_img = tkinter.PhotoImage(file="buttons_light/upload-model.png")
+    bt_upload_model_img_dark = tkinter.PhotoImage(file="buttons_dark/upload-model-button-dark.png")
+    UploadModelButton = tkinter.Button(
+        root, command=open_file_dialog_prim, image=bt_upload_model_img, bd=0
     )
-    AddFileButtonPrim.place(x=400, y=195)
+    UploadModelButton.place(x=400, y=195)
 
     bt_settings_img = tkinter.PhotoImage(file="buttons_light/settings.png")
     bt_settings_img_dark = tkinter.PhotoImage(file="buttons_dark/settings.png")

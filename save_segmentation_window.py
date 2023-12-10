@@ -20,9 +20,15 @@ class SaveSegmentationWindow:
         )
 
         self.browse_img = (
-            tkinter.PhotoImage(file="buttons_dark/download.png")
-            if is_dark_mode
-            else tkinter.PhotoImage(file="buttons_light/download.png")
+            tkinter.PhotoImage(file="buttons_dark/browse.png")
+            if self.is_dark_mode
+            else tkinter.PhotoImage(file="buttons_light/browse.png")
+        )
+
+        self.save_img = (
+            tkinter.PhotoImage(file="buttons_dark/save.png")
+            if self.is_dark_mode
+            else tkinter.PhotoImage(file="buttons_light/save.png")
         )
 
         self.save_segmentation_window.title("Save labels")
@@ -53,7 +59,7 @@ class SaveSegmentationWindow:
 
         save_button = tkinter.Button(self.save_segmentation_window,
                                      command=lambda: self.save_path(path_entry),
-                                     image=self.browse_img)
+                                     image=self.save_img)
         save_button.place(x=640, y=350)
 
         self.save_segmentation_window.mainloop()
