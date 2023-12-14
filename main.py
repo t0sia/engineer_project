@@ -39,13 +39,13 @@ def open_file_dialog():
 def open_instructions_dialog():
     instructions_window = tkinter.Toplevel()
     instructions_window.configure(bg="black")
-    instructions_window.geometry("600x600")
+    instructions_window.geometry("800x500")
     tkinter.Label(
         instructions_window,
         font=("Helvetica", 16),
         bg="black",
         fg="white",
-        text="jakaś instrukcja bla bla bla",
+        text="After launching the application, you should upload a NIfTI file\n containing tomographic images. This will enable the application\n to utilize a neural network for segmentation. Alternatively, there\n is an option to add pre-existing images with already labeled\n organ regions. The next step involves adjusting the display parameters\n of the segmented images. This can be done in a window\n that appears after clicking the SETTINGS button in the main menu.\n You can customize colors, font size, frame width around organs,\n as well as gamma and image transparency parameters according\n to their preferences. To view the performed segmentations, simply\n click the START button in the main menu. A window will then\n appear where you can browse images with highlighted organs using\n a slider located at the bottom of the screen. The application\n allows the download of generated labels by clicking the\n DOWNLOAD button. You can choose the file name and save path in the system.\n Additionally, there is an option to change the visual theme using the\n DARK MODE and LIGHT MODE buttons.",
     ).place(x=20, y=20)
 
 
@@ -55,9 +55,9 @@ def start():
         NapariWindow(labels_filepath, myParams)
     else:
         label_upload_file = tkinter.Label(
-            root, font=("Helvetica", 16), bg="red", text="Please upload file!"
+            root, font=("Helvetica", 32), bg="red", text="Please upload file!"
         )
-        label_upload_file.place(x=400, y=600)
+        label_upload_file.place(x=420, y=600)
 
 
 def open_seg_color_settings(seg):
