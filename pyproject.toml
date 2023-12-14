@@ -6,6 +6,8 @@ authors = [""]
 
 [tool.poetry.dependencies]
 python = "^3.8"
+monai = {extras = ["nibabel", "einops"] , version = "=1.2.0"}
+torch = "=1.13.1"
 napari = "^0.4"
 scikit-image = "^0.20"
 napari-nifti = "^0.0.12"
