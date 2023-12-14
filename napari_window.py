@@ -1,9 +1,16 @@
+import os
+import cv2
 import napari
 import numpy as np
+import tkinter as Tk
+import matplotlib
+from matplotlib import pyplot as plt
+from matplotlib.widgets import Slider
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from napari_nifti._reader import load_nifti
-from napari_nifti._writer import write_single_image
 import skimage.measure
 import imageio.v3 as iio
+from qtpy.QtCore import QTimer
 
 from text_alignment import TextAlignment
 from enums.blending import Blending
@@ -40,6 +47,43 @@ class NapariWindow:
             self.viewer.dims.current_step = (i, self.dimensions[1], self.dimensions[2])
             screenshot = self.viewer.screenshot(canvas_only=True)
             iio.imwrite(f"./screenshots/plane_{i}.png", screenshot)
+        return './screenshots'
+
+    # displays result images in new Tkinter window
+    def load_images(self, folder):
+        images = []
+        for filename in os.listdir(folder):
+            img = cv2.imread(os.path.join(folder, filename))
+            if img is not None:
+                images.append(img)
+        return images
+
+    def update_view(self, val):
+        self.plot.imshow(self.images_array[val])
+
+
+    def display_images(self):
+        fig = plt.Figure()
+
+        matplotlib.use('TkAgg', force=True)
+
+        root = Tk.Tk()
+        canvas = FigureCanvasTkAgg(fig, root)
+        canvas.get_tk_widget().pack(side=Tk.TOP, fill=Tk.BOTH, expand=1)
+
+        Tk.mainloop()
+
+        self.plot = fig.add_subplot(111)
+
+        self.plot.imshow(self.images_array[60])
+        # Slider layout
+        slider_ax = plt.axes([0.25, 0.1, 0.65, 0.03])
+
+        image_slider = Slider(ax=slider_ax, label='', valmin=0, valmax=90, valinit=60)
+
+        image_slider.on_changed(self.update_view)
+
+
 
     # converts SegmentationColors class instance to dictionary
     # supported as napari labels layer argument
@@ -174,7 +218,15 @@ class NapariWindow:
             6: "Brain",
         }
 
+
         self.viewer = napari.Viewer()
+        self.viewer.window._toggle_menubar_visible()
+        self.viewer.window._qt_viewer.layerButtons.hide()
+        self.viewer.window._qt_viewer.layers.hide()
+        self.viewer.window._qt_viewer.controls.hide()
+        self.viewer.window._qt_viewer.viewerButtons.hide()
+        self.viewer.window._qt_viewer.dockLayerList.hide()
+        self.viewer.window._qt_viewer.dockLayerControls.hide()
 
         self.viewer.add_image(
             self.image_data["image"],
@@ -229,6 +281,11 @@ class NapariWindow:
             text=self.text_kwargs,
         )
 
-        # self.save_images()
+        images_folder = self.save_images()
 
         napari.run()
+
+        #self.viewer.close()
+
+        #self.images_array = self.load_images(images_folder)
+        #self.display_images()
