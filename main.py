@@ -21,7 +21,6 @@ def dark_mode():
         InstructionDialogButton.config(image=bt_instruction_img_dark)
         SettingsButton.config(image=bt_settings_img_dark)
         DarkModeButton.config(image=bt_mode_img_dark)
-        DownloadButton.config(image=bt_download_img_dark)
         is_dark_mode = True
     else:
         img.config(image=bg)
@@ -31,7 +30,6 @@ def dark_mode():
         InstructionDialogButton.config(image=bt_instruction_img)
         SettingsButton.config(image=bt_settings_img)
         DarkModeButton.config(image=bt_mode_img)
-        DownloadButton.config(image=bt_download_img)
         is_dark_mode = False
 
 
@@ -46,13 +44,13 @@ def open_file_dialog_prim():
 def open_instructions_dialog():
     instructions_window = tkinter.Toplevel()
     instructions_window.configure(bg="black")
-    instructions_window.geometry("800x500")
+    instructions_window.geometry("700x600")
     tkinter.Label(
         instructions_window,
         font=("Helvetica", 16),
         bg="black",
         fg="white",
-        text="After launching the application, you should upload a NIfTI file\n containing tomographic images. This will enable the application\n to utilize a neural network for segmentation. Alternatively, there\n is an option to add pre-existing images with already labeled\n organ regions. The next step involves adjusting the display parameters\n of the segmented images. This can be done in a window\n that appears after clicking the SETTINGS button in the main menu.\n You can customize colors, font size, frame width around organs,\n as well as gamma and image transparency parameters according\n to their preferences. To view the performed segmentations, simply\n click the START button in the main menu. A window will then\n appear where you can browse images with highlighted organs using\n a slider located at the bottom of the screen. The application\n allows the download of generated labels by clicking the\n DOWNLOAD button. You can choose the file name and save path in the system.\n Additionally, there is an option to change the visual theme using the\n DARK MODE and LIGHT MODE buttons.",
+        text="After launching the application, you should upload a NIfTI\nfile containing tomographic images. This will enable the\n application to utilize a neural network for segmentation.\n Alternatively, there is an option to add pre-existing images\n with already labeled organ regions. The next step involves\n adjusting the display parameters of the segmented images.\n This can be done in a window that appears after clicking the\n SETTINGS button in the main menu. You can customize colors,\n font size, frame width around organs, as well as gamma\n and image transparency parameters according to their\n preferences. To view the performed segmentations, simply\n click the START button in the main menu. A window will open\n where you can choose the saving path for the finalized model.\n Subsequently, you will need to wait until the program\n completes all computations. A window will then appear where\n you can browse images with highlighted organs using a slider\n located at the bottom of the screen.  You can choose\n the file name and save path in the system. Additionally,\n there is an option to change the visual theme using\n the DARK MODE and LIGHT MODE buttons."
     ).place(x=20, y=20)
 
 
@@ -76,10 +74,6 @@ def open_settings_window():
     settings_window.open()
 
 
-def download():
-    print("pobieranko tralalalal")
-
-
 if __name__ == "__main__":
     root = tkinter.Tk()
     root.geometry("1200x675")
@@ -100,37 +94,32 @@ if __name__ == "__main__":
     AddFileButton = tkinter.Button(
         root, command=open_file_dialog, image=bt_add_file_img, bd=0
     )
-    AddFileButton.place(x=400, y=115)
+    AddFileButton.place(x=400, y=125)
 
     bt_upload_model_img = tkinter.PhotoImage(file="buttons_light/upload-model.png")
     bt_upload_model_img_dark = tkinter.PhotoImage(file="buttons_dark/upload-model-button-dark.png")
     UploadModelButton = tkinter.Button(
         root, command=open_file_dialog_prim, image=bt_upload_model_img, bd=0
     )
-    UploadModelButton.place(x=400, y=195)
+    UploadModelButton.place(x=400, y=215)
 
     bt_settings_img = tkinter.PhotoImage(file="buttons_light/settings.png")
     bt_settings_img_dark = tkinter.PhotoImage(file="buttons_dark/settings.png")
     SettingsButton = tkinter.Button(
         root, command=open_settings_window, image=bt_settings_img, bd=0
     )
-    SettingsButton.place(x=400, y=275)
+    SettingsButton.place(x=400, y=305)
 
     bt_instruction_img = tkinter.PhotoImage(file="buttons_light/instruction.png")
     bt_instruction_img_dark = tkinter.PhotoImage(file="buttons_dark/instruction.png")
     InstructionDialogButton = tkinter.Button(
         root, command=open_instructions_dialog, image=bt_instruction_img, bd=0
     )
-    InstructionDialogButton.place(x=400, y=355)
+    InstructionDialogButton.place(x=400, y=395)
 
     bt_mode_img = tkinter.PhotoImage(file="buttons_light/dark-mode.png")
     bt_mode_img_dark = tkinter.PhotoImage(file="buttons_dark/light-mode.png")
     DarkModeButton = tkinter.Button(root, command=dark_mode, image=bt_mode_img, bd=0)
-    DarkModeButton.place(x=400, y=435)
-
-    bt_download_img = tkinter.PhotoImage(file="buttons_light/download.png")
-    bt_download_img_dark = tkinter.PhotoImage(file="buttons_dark/download.png")
-    DownloadButton = tkinter.Button(root, command=download, image=bt_download_img, bd=0)
-    DownloadButton.place(x=400, y=505)
+    DarkModeButton.place(x=400, y=485)
 
     root.mainloop()
