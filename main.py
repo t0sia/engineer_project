@@ -50,7 +50,7 @@ def open_instructions_dialog():
         font=("Helvetica", 16),
         bg="black",
         fg="white",
-        text="After launching the application, you should upload a NIfTI\nfile containing tomographic images. This will enable the\n application to utilize a neural network for segmentation.\n Alternatively, there is an option to add pre-existing images\n with already labeled organ regions. The next step involves\n adjusting the display parameters of the segmented images.\n This can be done in a window that appears after clicking the\n SETTINGS button in the main menu. You can customize colors,\n font size, frame width around organs, as well as gamma\n and image transparency parameters according to their\n preferences. To view the performed segmentations, simply\n click the START button in the main menu. A window will open\n where you can choose the saving path for the finalized model.\n Subsequently, you will need to wait until the program\n completes all computations. A window will then appear where\n you can browse images with highlighted organs using a slider\n located at the bottom of the screen.  You can choose\n the file name and save path in the system. Additionally,\n there is an option to change the visual theme using\n the DARK MODE and LIGHT MODE buttons."
+        text="After launching the application, you should upload a NIfTI\nfile containing tomographic images. This will enable the\n application to utilize a neural network for segmentation.\n Alternatively, there is an option to add pre-existing images\n with already labeled organ regions. The next step involves\n adjusting the display parameters of the segmented images.\n This can be done in a window that appears after clicking the\n SETTINGS button in the main menu. You can customize colors,\n font size, frame width around organs, as well as gamma\n and image transparency parameters according to their\n preferences. To view the performed segmentations, simply\n click the START button in the main menu. A window will open\n where you can choose the saving path for the finalized model.\n Subsequently, you will need to wait until the program\n completes all computations. A window will then appear where\n you can browse images with highlighted organs using a slider\n located at the bottom of the screen.  You can choose\n the file name and save path in the system. Additionally,\n there is an option to change the visual theme using\n the DARK MODE and LIGHT MODE buttons.",
     ).place(x=20, y=20)
 
 
@@ -58,7 +58,9 @@ def start(root):
     myParams.print_params(myParams)
     if myParams.original_image:
         if not myParams.segmentation:
-            save_segmentation_window = SaveSegmentationWindow(is_dark_mode=is_dark_mode, params=myParams)
+            save_segmentation_window = SaveSegmentationWindow(
+                is_dark_mode=is_dark_mode, params=myParams
+            )
             save_segmentation_window.open()
         else:
             NapariWindow(myParams)
@@ -86,7 +88,9 @@ if __name__ == "__main__":
 
     bt_start_img = tkinter.PhotoImage(file="buttons_light/start.png")
     bt_start_img_dark = tkinter.PhotoImage(file="buttons_dark/start.png")
-    StartButton = tkinter.Button(root, command=lambda: start(root), image=bt_start_img, bd=0)
+    StartButton = tkinter.Button(
+        root, command=lambda: start(root), image=bt_start_img, bd=0
+    )
     StartButton.place(x=400, y=35)
 
     bt_add_file_img = tkinter.PhotoImage(file="buttons_light/add-file.png")
@@ -97,7 +101,9 @@ if __name__ == "__main__":
     AddFileButton.place(x=400, y=125)
 
     bt_upload_model_img = tkinter.PhotoImage(file="buttons_light/upload-model.png")
-    bt_upload_model_img_dark = tkinter.PhotoImage(file="buttons_dark/upload-model-button-dark.png")
+    bt_upload_model_img_dark = tkinter.PhotoImage(
+        file="buttons_dark/upload-model-button-dark.png"
+    )
     UploadModelButton = tkinter.Button(
         root, command=open_file_dialog_prim, image=bt_upload_model_img, bd=0
     )

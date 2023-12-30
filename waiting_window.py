@@ -22,9 +22,9 @@ class WaitingWindow:
 
     def open_and_process(self):
         label_wait = tkinter.Label(
-            self.waiting_window, font=("Helvetica", 16),
-            text="Please wait\n"
-                 "Thank you for making a little script happy :)"
+            self.waiting_window,
+            font=("Helvetica", 16),
+            text="Please wait\n" "Thank you for making a little script happy :)",
         )
         label_wait.place(x=280, y=80)
 

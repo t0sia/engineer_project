@@ -12,6 +12,8 @@ napari = "^0.4"
 scikit-image = "^0.20"
 napari-nifti = "^0.0.12"
 numpy = "^1.20"
+matplotlib = "^3.7"
+opencv-python = "^4.6"
 
 [tool.poetry.group.dev.dependencies]
 black = "^23.0.0"

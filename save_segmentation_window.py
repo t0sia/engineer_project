@@ -11,7 +11,9 @@ class SaveSegmentationWindow:
 
         self.save_segmentation_window = tkinter.Toplevel()
         self.save_segmentation_window.geometry("1200x675")
-        self.save_segmentation_window.protocol('WM_DELETE_WINDOW', self.close_and_process)
+        self.save_segmentation_window.protocol(
+            "WM_DELETE_WINDOW", self.close_and_process
+        )
 
         self.bg = (
             tkinter.PhotoImage(file="backgrounds/dark.png")
@@ -37,29 +39,35 @@ class SaveSegmentationWindow:
 
     def open(self):
         label_save_segmentation_question = tkinter.Label(
-            self.save_segmentation_window, font=("Helvetica", 16),
+            self.save_segmentation_window,
+            font=("Helvetica", 16),
             text="If you wish to save segmentation labels, please specify a path for saving.\n"
-                 "Alternatively, you can close the window and proceed without saving."
+            "Alternatively, you can close the window and proceed without saving.",
         )
         label_save_segmentation_question.place(x=170, y=80)
 
         label_enter_path = tkinter.Label(
-            self.save_segmentation_window, font=("Helvetica", 16),
-            text="Enter Path: "
+            self.save_segmentation_window, font=("Helvetica", 16), text="Enter Path: "
         )
         label_enter_path.place(x=170, y=240)
 
-        path_entry = tkinter.Entry(self.save_segmentation_window, width=58, font=("Helvetica", 16))
+        path_entry = tkinter.Entry(
+            self.save_segmentation_window, width=58, font=("Helvetica", 16)
+        )
         path_entry.place(x=170, y=280)
 
-        browse_button = tkinter.Button(self.save_segmentation_window,
-                                       command=lambda: self.browse_path(path_entry),
-                                       image=self.browse_img)
+        browse_button = tkinter.Button(
+            self.save_segmentation_window,
+            command=lambda: self.browse_path(path_entry),
+            image=self.browse_img,
+        )
         browse_button.place(x=170, y=350)
 
-        save_button = tkinter.Button(self.save_segmentation_window,
-                                     command=lambda: self.save_path(path_entry),
-                                     image=self.save_img)
+        save_button = tkinter.Button(
+            self.save_segmentation_window,
+            command=lambda: self.save_path(path_entry),
+            image=self.save_img,
+        )
         save_button.place(x=640, y=350)
 
         self.save_segmentation_window.mainloop()

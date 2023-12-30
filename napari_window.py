@@ -12,12 +12,13 @@ import skimage.measure
 import imageio.v3 as iio
 from qtpy.QtCore import QTimer
 
-from .text_alignment import TextAlignment
-from .enums.blending import Blending
-from .enums.colormap import Colormap
-from .napari_color_format import NapariColorFormat
-from .segmentation_colors import SegmentationColors
-from .params import Params
+from text_alignment import TextAlignment
+from enums.blending import Blending
+from enums.colormap import Colormap
+from napari_color_format import NapariColorFormat
+from segmentation_colors import SegmentationColors
+from params import Params
+
 
 class NapariWindow:
     # creates bounding box corners from segmentations array
@@ -46,7 +47,7 @@ class NapariWindow:
             self.viewer.dims.current_step = (i, self.dimensions[1], self.dimensions[2])
             screenshot = self.viewer.screenshot(canvas_only=True)
             iio.imwrite(f"./screenshots/plane_{i}.png", screenshot)
-        return './screenshots'
+        return "./screenshots"
 
     # displays result images in new Tkinter window
     def load_images(self, folder):
@@ -60,11 +61,10 @@ class NapariWindow:
     def update_view(self, val):
         self.plot.imshow(self.images_array[val])
 
-
     def display_images(self):
         fig = plt.Figure()
 
-        matplotlib.use('TkAgg', force=True)
+        matplotlib.use("TkAgg", force=True)
 
         root = Tk.Tk()
         canvas = FigureCanvasTkAgg(fig, root)
@@ -78,17 +78,14 @@ class NapariWindow:
         # Slider layout
         slider_ax = plt.axes([0.25, 0.1, 0.65, 0.03])
 
-        image_slider = Slider(ax=slider_ax, label='', valmin=0, valmax=90, valinit=60)
+        image_slider = Slider(ax=slider_ax, label="", valmin=0, valmax=90, valinit=60)
 
         image_slider.on_changed(self.update_view)
-
-
 
     # converts SegmentationColors class instance to dictionary
     # supported as napari labels layer argument
     @staticmethod
-    def segmentation_colors_to_layer_argument(segmentation_colors: SegmentationColors
-    ):
+    def segmentation_colors_to_layer_argument(segmentation_colors: SegmentationColors):
         colors_dict = {
             0: [0, 0, 0, 0.1],
             1: segmentation_colors.liver_color.to_rgba_array(),
@@ -217,7 +214,6 @@ class NapariWindow:
             6: "Brain",
         }
 
-
         self.viewer = napari.Viewer()
         self.viewer.window._toggle_menubar_visible()
         self.viewer.window._qt_viewer.layerButtons.hide()
@@ -284,7 +280,7 @@ class NapariWindow:
 
         napari.run()
 
-        #self.viewer.close()
+        # self.viewer.close()
 
-        #self.images_array = self.load_images(images_folder)
-        #self.display_images()
+        # self.images_array = self.load_images(images_folder)
+        # self.display_images()
