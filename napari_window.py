@@ -12,13 +12,12 @@ import skimage.measure
 import imageio.v3 as iio
 from qtpy.QtCore import QTimer
 
-from text_alignment import TextAlignment
-from enums.blending import Blending
-from enums.colormap import Colormap
-from napari_color_format import NapariColorFormat
-from enums.segmentation_colors import SegmentationColors
-from params import Params
-
+from .text_alignment import TextAlignment
+from .enums.blending import Blending
+from .enums.colormap import Colormap
+from .napari_color_format import NapariColorFormat
+from .segmentation_colors import SegmentationColors
+from .params import Params
 
 class NapariWindow:
     # creates bounding box corners from segmentations array
@@ -87,8 +86,8 @@ class NapariWindow:
 
     # converts SegmentationColors class instance to dictionary
     # supported as napari labels layer argument
-    def segmentation_colors_to_layer_argument(
-        self, segmentation_colors: SegmentationColors
+    @staticmethod
+    def segmentation_colors_to_layer_argument(segmentation_colors: SegmentationColors
     ):
         colors_dict = {
             0: [0, 0, 0, 0.1],

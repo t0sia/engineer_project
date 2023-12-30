@@ -1,4 +1,4 @@
-from napari_color_format import NapariColorFormat
+from .napari_color_format import NapariColorFormat
 
 
 # contains NapariColorFormat objects for

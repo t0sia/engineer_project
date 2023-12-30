@@ -1,5 +1,5 @@
-from napari_color_format import NapariColorFormat
-from enums.segmentation_colors import SegmentationColors
+from .napari_color_format import NapariColorFormat
+from .segmentation_colors import SegmentationColors
 
 
 class Params:
